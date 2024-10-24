@@ -1,6 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
+  devServer:{
+    port:3001
+  },
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   build:{
@@ -13,7 +16,8 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    '@pinia/nuxt',
   ],
   vite: {
     vue: {
