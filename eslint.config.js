@@ -19,6 +19,7 @@ export default [
       "@typescript-eslint/triple-slash-reference": 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       "@typescript-eslint/ban-ts-comment": 'off',
+      "vue/multi-word-component-names": 'off',
     }
 }
 ];
