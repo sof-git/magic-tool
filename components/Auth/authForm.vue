@@ -11,12 +11,13 @@ const credentials: ICredentials = reactive({
 
 // Use the alert composable
 // Use the composable
-const { submitCredentials, alertContent } = useSubmitCredentials();
+const { submitCredentials, alertContent, errors } = useSubmitCredentials();
+
 </script>
 
 <template>
+  <h1 class="d-flex justify-center">Login</h1>
   <div class="elevation-1 d-block align-center">
-    <h1 class="d-flex justify-center">Login</h1>
     <v-form class="ma-5" @submit.prevent="submitCredentials(credentials)">
       <v-text-field
         v-model="credentials.username"
@@ -24,6 +25,9 @@ const { submitCredentials, alertContent } = useSubmitCredentials();
         type="text"
         clearable
         required
+        :error="!!errors.username"
+        :error-messages="errors.username"
+        :class="{'error-border': !!errors.username}"
       ></v-text-field>
       <v-text-field
         v-model="credentials.password"
@@ -31,6 +35,9 @@ const { submitCredentials, alertContent } = useSubmitCredentials();
         type="password"
         clearable
         required
+        :error="!!errors.password"
+        :error-messages="errors.password"
+        :class="{'error-border': !!errors.password}"
       ></v-text-field>
       <div class="d-flex flex-wrap justify-center mb-5">
         <v-btn class="mb-5"  color="primary" type="submit">Submit</v-btn>
@@ -39,3 +46,9 @@ const { submitCredentials, alertContent } = useSubmitCredentials();
     <alert :show="alertContent.show" :message="alertContent.message" :type="alertContent.type" />
   </div>
 </template>
+
+<style scoped>
+.error-border {
+  border-color: red !important;
+}
+</style>

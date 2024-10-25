@@ -34,11 +34,8 @@
     "typescript-eslint": "^8.10.0",
     "vite-plugin-vuetify": "^2.0.4",
     "vuetify": "^3.7.3"
-<<<<<<< HEAD
-=======
   },
   "overrides": {
     "vue": "latest"
->>>>>>> main
   }
 }
