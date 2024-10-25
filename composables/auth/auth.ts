@@ -7,13 +7,23 @@ export function useSubmitCredentials() {
   const { $authSchema } = useNuxtApp();  // Get schema validator
   const authStore = useAuthStore();      // Pinia auth store
   const { alertContent, showAlert } = useAlert();  // Alert composable
+  const errors: Record<string, string> = reactive({});
+
 
   const submitCredentials = async (credentials: ICredentials) => {
+    
+    //clear previous errors 
+    Object.keys(errors).forEach(key => (errors[key] = ''));
+
     const { error } = $authSchema.validate(credentials, { abortEarly: false });
     if (error) {
-      showAlert(error.message, 'error');
+      error.details.forEach(detail => {
+          // TypeScript now understands this correctly
+          errors[detail.context?.key || ''] = detail.message; 
+      });
+      showAlert("Please fix the errors in the form", "error");
       return;
-    }
+  }
 
     try {
       const response = await authStore.login(credentials);
@@ -26,5 +36,6 @@ export function useSubmitCredentials() {
   return {
     submitCredentials,  // Expose the function
     alertContent,       // Expose alert content for UI binding
+    errors,             // Expose errors for UI binding
   };
 }
