@@ -2,7 +2,9 @@
 import AuthForm from '@/components/Auth/authForm.vue';
 import registerForm from '@/components/Auth/register.vue';
 
-
+definePageMeta({
+  layout: false
+});
 
 const loginOrRegister = reactive({
   isLogin: true,

@@ -33,9 +33,15 @@ export function useSubmitCredentials() {
     }
   };
 
+  const logout = () => {
+    authStore.logout();
+    showAlert('You have been logged out', 'info');
+  }
+
   return {
     submitCredentials,  // Expose the function
     alertContent,       // Expose alert content for UI binding
-    errors,             // Expose errors for UI binding
+    errors,
+    logout,             // Expose errors for UI binding
   };
 }

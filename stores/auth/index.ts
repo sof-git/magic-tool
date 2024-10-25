@@ -12,7 +12,7 @@ export const useAuthStore = defineStore('auth', {
     /**
      * @property {string|null} token - Stores the JWT token for the authenticated user, or null if not logged in.
      */
-    token: null,
+    token: ref<string | null>(null),
   }),
 
   getters: {
@@ -48,10 +48,34 @@ export const useAuthStore = defineStore('auth', {
         throw new Error(response.error);
       } else {
         this.token = response.access_token
+        if (import.meta.client) {
+          localStorage.setItem('authToken', response.access_token); // Only save on client-side
+        }
         return navigateTo('/');
         //route to /
         
       }
     },
+
+    /**
+     * Sets the token in the store state.
+     * 
+     * @param {string} token - The JWT token to set.
+     */
+
+    setToken(token:string) {
+        this.token = token;
+        if (import.meta.client) {
+          localStorage.setItem('authToken', token); // Only save on client-side
+        }// Only save on client-side
+    },
+
+    /**
+     * Logs out the current user by clearing the token.
+     */
+    logout() {
+      this.token = null;
+      return navigateTo('/auth');
+    }
   },
 });

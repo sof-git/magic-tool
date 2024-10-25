@@ -36,7 +36,6 @@ export function useRegisterUser() {
                 showAlert('User created successfully', 'success');
             }
         } catch(error: any) {
-            console.log(error.message);
             showAlert(error.message, 'error');
         }
     }
