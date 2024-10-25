@@ -11,6 +11,8 @@ const RomTheme: ThemeDefinition = {
     secondary: '#196F3D', // Forest Green
     accent: '#FF6F00', // Fiery Orange
     background: '#2C3E50', // Dark Mystic Background
+    backgroundLight: '#34495E', // Lighter Mystic Background 
+    grey: '#BDC3C7', // Silver Grey for text
     error: '#C0392B', // Crimson Red for errors
     success: '#28B463', // Enchanted Emerald Green for success
     info: '#5DADE2', // Sky Blue for spells like ice or water
