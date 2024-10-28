@@ -1,10 +1,12 @@
 import { useAuthStore } from "~/stores/auth";
 
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async(to) => {
   const authStore = useAuthStore();
 
+  const tokenLoaded = await authStore.loadToken();
+  
   // Allow access to the auth page if the user is not authenticated
-  if (!authStore.isAuthenticated && to.path !== '/auth') {
+  if (!authStore.isAuthenticated && to.path  !== '/auth' && tokenLoaded) {
     return navigateTo('/auth'); // Redirect to auth page if not authenticated
   }
 

@@ -3,7 +3,7 @@ import { ref, provide } from 'vue';
 import appBar from '~/components/layout/appBar.vue'
 import navigation from '~/components/layout/navigation.vue'
 
-const drawer:Ref<boolean> = ref(false);
+const drawer:Ref<boolean> = ref(true);
 
 const toggleDrawer = () => {
   drawer.value = !drawer.value;

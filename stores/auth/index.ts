@@ -1,5 +1,10 @@
-import { defineStore } from "#imports";
+import { defineStore } from "pinia";
+import {jwtDecode}  from "jwt-decode";
 import type { ICredentials } from "~/types/user";
+
+interface DecodedToken {
+  exp: number; // Token expiration time in seconds since Unix epoch
+}
 
 /**
  * Auth store
@@ -12,12 +17,14 @@ export const useAuthStore = defineStore('auth', {
     /**
      * @property {string|null} token - Stores the JWT token for the authenticated user, or null if not logged in.
      */
-    token: ref<string | null>(null),
+    token: null as string | null,
+    tokenExpirationTimer: null as number | null, // Timer for token expiration
+    
   }),
 
   getters: {
     /**
-     * Checks if a user is authenticated by verifying the presence of user data.
+     * Checks if a user is authenticated by verifying the presence of the token.
      * 
      * @returns {boolean} True if the user is authenticated, otherwise false.
      */
@@ -25,6 +32,18 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
+    loadToken(): Promise<void> {
+      return new Promise((resolve) => {
+        if (import.meta.client) {
+          const savedToken = localStorage.getItem('authToken');
+          if (savedToken) {
+            this.token = savedToken;
+          }
+        }
+        resolve();
+      });
+    },
+
     /**
      * Logs in a user by sending credentials to the server.
      * 
@@ -67,7 +86,8 @@ export const useAuthStore = defineStore('auth', {
         this.token = token;
         if (import.meta.client) {
           localStorage.setItem('authToken', token); // Only save on client-side
-        }// Only save on client-side
+          this.startTokenExpirationCheck(); // Start token expiration check
+        }
     },
 
     /**
@@ -75,7 +95,26 @@ export const useAuthStore = defineStore('auth', {
      */
     logout() {
       this.token = null;
+      if (this.tokenExpirationTimer) {
+        clearTimeout(this.tokenExpirationTimer);
+        this.tokenExpirationTimer = null;
+      }
+      localStorage.removeItem('authToken');
       return navigateTo('/auth');
-    }
+    },
+    startTokenExpirationCheck() {
+      if (!this.token) return;
+
+      const decoded: DecodedToken = jwtDecode(this.token);
+      const expiresIn = decoded.exp * 1000 - Date.now();
+
+      if (expiresIn <= 0) {
+        this.logout();
+      } else {
+        this.tokenExpirationTimer = window.setTimeout(() => {
+          this.logout();
+        }, expiresIn);
+      }
+    },
   },
 });
