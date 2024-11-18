@@ -30,12 +30,72 @@ export const registerSchema = Joi.object({
     role: Joi.string().required().valid('admin', 'user')
 })
 
+export const heroSchema = Joi.object({
+    name: Joi.string().required().messages({
+        'string.empty': 'Name is required',
+    }),
+    description: Joi.string().required().messages({
+        'string.empty': 'Description is required',
+    }),
+    img:{
+        url: Joi.string().allow("").default('/uploads/default.jpg'),
+        alt: Joi.string().default('Hero Image'),
+    },
+    activeSpell: Joi.object({
+        name: Joi.string().required().messages({
+            'string.empty': 'Name is required',
+        }),
+        description: Joi.string().required().messages({
+            'string.empty': 'Description is required',
+        }),
+        type: Joi.string().required().messages({
+            'string.empty': 'Type is required',
+        }),
+        target: Joi.string().required().messages({
+            'string.empty': 'Target is required',
+        }),
+        duration: Joi.string().required().messages({
+            'string.empty': 'Duration is required',
+        }),
+        effect: Joi.string().required().messages({
+            'string.empty': 'Effect is required',
+        }),
+        value: Joi.number().required().messages({
+            'number.empty': 'Value is required',
+        }),
+    }),
+    passiveSpell: Joi.object({
+        name: Joi.string().required().messages({
+            'string.empty': 'Name is required',
+        }),
+        description: Joi.string().required().messages({
+            'string.empty': 'Description is required',
+        }),
+        type: Joi.string().required().messages({
+            'string.empty': 'Type is required',
+        }),
+        target: Joi.string().required().messages({
+            'string.empty': 'Target is required',
+        }),
+        duration: Joi.string().required().messages({
+            'string.empty': 'Duration is required',
+        }),
+        effect: Joi.string().required().messages({
+            'string.empty': 'Effect is required',
+        }),
+        value: Joi.number().required().messages({
+            'number.empty': 'Value is required',
+        }),
+    }),
+});
+
 export default defineNuxtPlugin(() => {
     return {
         provide: {
             joi: Joi,
             authSchema,
-            registerSchema
+            registerSchema,
+            heroSchema,
         }
     }
 });

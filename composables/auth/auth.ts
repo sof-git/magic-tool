@@ -41,7 +41,7 @@ export function useSubmitCredentials() {
   return {
     submitCredentials,  // Expose the function
     alertContent,       // Expose alert content for UI binding
-    errors,
+    errors,             // Expose errors for UI binding
     logout,             // Expose errors for UI binding
   };
 }

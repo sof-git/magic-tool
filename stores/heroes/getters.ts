@@ -16,7 +16,4 @@ export default {
     getHeroById(state: IHeroState) {
         return (id: string) => state.heroes.find((hero) => hero.id === id);
     },
-    getHeroByType(state: IHeroState) {
-        return (type: string) => state.heroes.filter((hero) => hero.type === type);
-    },
 };

@@ -2,27 +2,31 @@
 import { onMounted } from 'vue';
 import { useHeroesStore } from '~/stores/heroes';
 import Table from '@/components/heroes/table.vue';
-
+import HeroForm from '@/components/heroes/heroForm.vue';
 const heroesStore = useHeroesStore()
-// Fetch heroes data on page load
+// Fetch heroes data on page load using onMounted
 onMounted(async () => {
-  console.log('fetching heroes');
   await heroesStore.fetchHeroes();
-  console.log("after fetch ",heroesStore.heroes);
 });
-provide('heroesStore', heroesStore);
+const tableOrForm = ref(false);
 
-
-// Provide the heroes store to child components
+const toggleTableOrForm = () => {
+    tableOrForm.value = !tableOrForm.value;
+}
 
 </script>
 
 <template>
-<v-container class="mx-10">
-    <v-row>
-        <v-col>
-            <Table :heroes="heroesStore.heroes" />
+<v-container>
+    <v-row v-if="!tableOrForm">
+        <v-col cols="12">
+            <Table :heroes="heroesStore.heroes" @toggleFormOrHeroes="toggleTableOrForm" />
         </v-col>
+    </v-row>
+    <v-row v-else>
+        <v-col cols="12" md="6" lg="4">
+            <HeroForm  @toggleFormOrHeroes="toggleTableOrForm" />
+        </v-col>    
     </v-row>
 </v-container>
 </template>

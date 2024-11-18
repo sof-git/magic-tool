@@ -41,17 +41,16 @@ export default {
      * @returns {Promise<void>} A promise that resolves when the hero is created.
      * @throws {Error} An error if the request fails.
      */
-    async createHero(this: IHeroState, hero: IHero) {
-    const authStore = useAuthStore();
-
+    async createHero(this: IHeroState,formData: FormData) {
+        const authStore = useAuthStore();    
         const response: any = await $fetch('http://localhost:3000/heroes', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${authStore.token}`,
             },
-            body: hero,
+            body: formData,
         });
+    
         if(response.error) {
             throw new Error(response.error);
         } else {
