@@ -29,6 +29,11 @@ export interface IHero {
     id?: string
     name: string;
     description: string;
+    img: {
+        url: string;
+        alt: string;
+        data: string
+    };
     passiveSpell: IPassiveSpell;
     activeSpell: IActiveSpell;
 }
@@ -39,10 +44,12 @@ export interface INewHero {
     img:{
         url: string;
         alt: string;
-    }
+        data: string
+    };
     passiveSpell: IPassiveSpell;
     activeSpell: IActiveSpell;
 }
+
 
 export interface heroImg {
     url: string;

@@ -7,31 +7,35 @@ import { createVuetify, type ThemeDefinition } from 'vuetify'
 const RomTheme: ThemeDefinition = {
   dark: false,
   colors: {
-    primary: '#7D3C98', // Mystic Purple
-    secondary: '#196F3D', // Forest Green
-    accent: '#FF6F00', // Fiery Orange
-    background: '#2C3E50', // Dark Mystic Background
-    backgroundLight: '#34495E', // Lighter Mystic Background 
+    primary: '#5E2B7E', // Royal Purple
+    secondary: '#2D6A4F', // Moss Green
+    accent: '#FFD700', // Shiny Gold
+    background: '#1E2749', // Midnight Blue
+    backgroundLight: '#3C4A63', // Soft Blue-Grey
     grey: '#BDC3C7', // Silver Grey for text
     error: '#C0392B', // Crimson Red for errors
     success: '#28B463', // Enchanted Emerald Green for success
     info: '#5DADE2', // Sky Blue for spells like ice or water
     warning: '#F39C12', // Golden Amber for caution or traps
-  }
+    black: '#000000', // Black for text
+    white: '#FFFFFF', // White for text
+  },
 }
 
 const RomThemeDark: ThemeDefinition = {
   dark: true,
   colors: {
-    primary: '#A569BD', // Slightly brighter Mystic Purple
-    secondary: '#27AE60', // Lively Forest Green
-    accent: '#F39C12', // Fiery Amber
-    background: '#1C2833', // Deep, Darker Background
+    primary: '#4A1E68', // Deep Mystic Purple
+    secondary: '#1D5C42', // Dark Emerald Green
+    accent: '#FFBF00', // Fiery Amber
+    background: '#14192B', // Charcoal Blue
     error: '#E74C3C', // Brighter Red for errors
     success: '#58D68D', // Bright Success Emerald
     info: '#85C1E9', // Brighter Sky Blue
-    warning: '#F5B041', // Warmer Warning Amber
-  }
+    warning: '#E07B39', // Copper
+    black: '#000000', // Black for text
+    white: '#FFFFFF', // White for text
+  },
 }
 
 export default defineNuxtPlugin((nuxtApp) => {

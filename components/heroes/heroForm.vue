@@ -8,18 +8,40 @@ import { spellsTypes, spellsTarget, spellsDuration, spellsEffect } from "~/types
 import type { IImage } from "~/types/images";
 import { VNumberInput } from 'vuetify/labs/VNumberInput'
 
+
 // Define heroParams with initial enum values
+const props = defineProps({
+    hero: {
+        type: Object as () => INewHero,
+        required: false,
+    },
+    method: {
+        type: String,
+        required: true,
+    },
+})
+
+onMounted(() => {
+    if(props.method === "PUT"  && props.hero ) {
+        Object.assign(heroParams, props.hero);
+        img.src = `data:image/png;base64,${heroParams.img.data}`
+    }
+});
+
+const method:Ref<string> = ref(props.method);
+
 const heroParams: INewHero = reactive({
     name: '',
     description: '',
     img:{
         url: '',
         alt: 'Hero Image',
+        data:'',
     },
     passiveSpell: {
         name: '',
         description: '',
-        type: spellsTypes.DAMAGE,  // Initialize with a default enum value
+        type: spellsTypes.DAMAGE, 
         target: spellsTarget.SELF,
         duration: spellsDuration.INSTANT,
         effect: spellsEffect.POISON,
@@ -27,7 +49,7 @@ const heroParams: INewHero = reactive({
     },
     activeSpell: {
         name: '',
-        description: '',
+        description:'',
         type: spellsTypes.DAMAGE,
         target: spellsTarget.SELF,
         duration: spellsDuration.INSTANT,
@@ -36,7 +58,23 @@ const heroParams: INewHero = reactive({
     },
 });
 
-const { submitHero, alertContent, errors } = useHero();
+const passiveSpellDescription = computed(() => {
+  const { type, target, duration, effect, value } = heroParams.passiveSpell;
+  return `Effect a ${type} spell on ${target} for ${duration} that causes ${effect} of ${value} points`;
+});
+
+const activeSpellDescription = computed(() => {
+  const { type, target, duration, effect, value } = heroParams.activeSpell;
+  return `Effect a ${type} spell on ${target} for ${duration} that causes ${effect} of ${value} points`;
+});
+
+watchEffect(() => {
+    heroParams.passiveSpell.description = passiveSpellDescription.value;
+    heroParams.activeSpell.description = activeSpellDescription.value;
+});
+
+
+const { submitHero,updateHero, alertContent, errors } = useHero();
 
 const items = [
     {title: 'Hero Details', icon: 'mdi-account', step: 1,color: "red",errors: errors},
@@ -78,7 +116,7 @@ const closeForm = () => {
 
 <template>
     <section>
-        <v-form @submit.prevent="submitHero(heroParams,img.file)">
+        <v-form @submit.prevent="method === 'POST' ? submitHero(heroParams,img.file) : updateHero(heroParams,img.file)">
         <v-stepper
             alt-labels
             :items="items"
@@ -132,6 +170,8 @@ const closeForm = () => {
                 v-model="heroParams.passiveSpell.description"
                 label="Passive Spell Description"
                 required
+                readonly
+                class="color-primary"
                 :error="!!errors.passiveSpell.description"
                 :error-messages="errors.passiveSpell.description"
             ></v-textarea>
@@ -226,7 +266,7 @@ const closeForm = () => {
         </v-stepper>
         <div class="d-flex justify-space-evenly">
             <v-btn @click="closeForm" class="my-5" color="white">Cancel</v-btn>
-            <v-btn class="my-5" type="submit" color="primary">Submit</v-btn>    
+            <v-btn class="my-5" type="submit" color="primary">{{method === "POST" ? "Submit" : "Update"}}</v-btn>    
         </div>
         </v-form>
         <alert :show="alertContent.show" :message="alertContent.message" :type="alertContent.type" />

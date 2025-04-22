@@ -25,7 +25,7 @@ const toggleTableOrForm = () => {
     </v-row>
     <v-row v-else>
         <v-col cols="12" md="6" lg="4">
-            <HeroForm  @toggleFormOrHeroes="toggleTableOrForm" />
+            <HeroForm  @toggleFormOrHeroes="toggleTableOrForm" method="POST"/>
         </v-col>    
     </v-row>
 </v-container>

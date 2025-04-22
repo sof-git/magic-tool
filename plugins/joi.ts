@@ -31,6 +31,8 @@ export const registerSchema = Joi.object({
 })
 
 export const heroSchema = Joi.object({
+    _id: Joi.string().allow("").default(''),
+    id: Joi.string().allow("").default(''),
     name: Joi.string().required().messages({
         'string.empty': 'Name is required',
     }),
@@ -40,6 +42,10 @@ export const heroSchema = Joi.object({
     img:{
         url: Joi.string().allow("").default('/uploads/default.jpg'),
         alt: Joi.string().default('Hero Image'),
+        _id: Joi.string().allow("").default(''),
+        id: Joi.string().allow("",null).default(''),
+        data: Joi.string().allow("").default(''),
+
     },
     activeSpell: Joi.object({
         name: Joi.string().required().messages({
@@ -87,6 +93,8 @@ export const heroSchema = Joi.object({
             'number.empty': 'Value is required',
         }),
     }),
+    createdAt: Joi.date(),
+    updatedAt: Joi.date(),
 });
 
 export default defineNuxtPlugin(() => {

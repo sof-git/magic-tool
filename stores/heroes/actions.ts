@@ -66,16 +66,15 @@ export default {
      * @throws {Error} An error if the request fails.
      */
 
-    async updateHero(this: IHeroState, hero: IHero) {
-        
+    async updateHero(this: IHeroState, formData: FormData) {
+        const hero: IHero = JSON.parse(formData.get('hero') as string);
         const authStore = useAuthStore();
         const response: any = await $fetch(`http://localhost:3000/heroes/${hero.id}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${authStore.token}`,
             },
-            body: hero,
+            body: formData,
         });
         if(response.error) {
             throw new Error(response.error);

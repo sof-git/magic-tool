@@ -72,7 +72,6 @@ export const useHero = () => {
             formData.append('file', file); // Attach the file
         }
         formData.append('hero', JSON.stringify(hero)); // Attach hero as a JSON string
-    
         try {
             const response = await heroesStore.createHero(formData);
             if (response.statusCode === 201) {
@@ -84,6 +83,43 @@ export const useHero = () => {
             showAlert(error.message, 'error');
         }
     };
+
+    const updateHero = async (hero: INewHero, file: File | null) => {
+        console.log(hero);
+        // Clear previous errors
+        Object.keys(errors).forEach(key => (errors[key] = ''));
+    
+        // Validate the hero object
+        const { error } = $heroSchema.validate(hero, { abortEarly: false });
+        if (error) {
+            error.details.forEach(detail => {
+                const errorPath = detail.path.join('.'); // Construct the path as a string
+                setNestedError(errorPath, detail.message);
+            });
+            showAlert("Please fix the errors in the form", "error");
+            return;
+        }
+    
+        // Create FormData to hold both the hero data and the image file
+        const formData = new FormData();
+        if(file) {
+            formData.append('file', file); // Attach the file
+        }
+        formData.append('hero', JSON.stringify(hero)); // Attach hero as a JSON string
+        try {
+            const response = await heroesStore.updateHero(formData);
+            if (response.statusCode === 200) {
+                showAlert('Hero updated successfully', 'success');
+            } else {
+                showAlert('Error updating hero', 'error');
+            }
+        } catch (error: any) {
+            showAlert(error.message, 'error');
+        }
+    }
+
+
+
     const handleFile = (file: File) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -95,6 +131,7 @@ export const useHero = () => {
     
     return {
         submitHero,
+        updateHero,
         alertContent,
         errors,
         handleFile,

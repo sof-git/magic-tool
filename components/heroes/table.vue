@@ -1,13 +1,12 @@
 <script setup async lang="ts">
+import type { IHero } from '~/types/heroes';
 const emit = defineEmits(['toggleFormOrHeroes']);
-const props = defineProps({
-  heroes: {
-    type: Array,
-    default: () => []
-  }
-});
+const props = defineProps<{
+  heroes: IHero[],
+}>();
 
 const headers = [
+        {sortable:false,value:"img"},
         { title: "Name", sortable: true, value: "name" },
         { title: "Description", sortable: true, value: "description" },
         { title: "Type", sortable: true, value: "type" },
@@ -16,8 +15,12 @@ const headers = [
 const search:Ref<string> = ref('');
 
 const toggleFormOrHeroes = () => {
-    console.log('toggleFormOrHeroes');
   emit('toggleFormOrHeroes');
+};
+
+const routeToHero = (event:Event,item: any) => {
+  const name:string = item.item.name;
+  navigateTo(`/hero/${name}`);
 };
 
 </script>
@@ -36,11 +39,15 @@ const toggleFormOrHeroes = () => {
         <v-data-table
             :search="search"
             :items-per-page="5"
+            :items="props.heroes"
+            @click:row="routeToHero"
             class="elevation-1 rounded-lg w-auto"
             :headers="headers"
             header-width="auto"
-            :items="props.heroes"
         >
+        <template #item.img="{ item }">
+          <img width="50" height="50" :src="`data:image/jpeg;base64,${item.img.data}`" alt="Hero Picture" class="table-image mt-2 rounded-circle" />
+        </template>
         </v-data-table> 
     </section>
 </template>
